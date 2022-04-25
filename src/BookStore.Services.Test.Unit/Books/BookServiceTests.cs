@@ -40,14 +40,7 @@ namespace BookStore.Services.Test.Unit.Books
             CategoryFactory categoryfactory = new CategoryFactory();
             Category category = categoryfactory.CreateCategory();
             _dataContext.Manipulate(x => x.Categories.Add(category));
-            AddBookDto dto = new AddBookDto
-            {
-                Author = "a",
-                Description = "d",
-                Pages = 12,
-                Title = "t",
-                CategoryId = category.Id
-            };
+            AddBookDto dto = CreateAddBookDto(category);
 
             _sut.Add(dto);
             var expected = _dataContext.books.Include(x => x.Category).FirstOrDefault();
@@ -55,6 +48,18 @@ namespace BookStore.Services.Test.Unit.Books
             expected.Author.Should().Be(dto.Author);
             expected.Description.Should().Be(dto.Description);
             expected.Pages.Should().Be(dto.Pages);
+        }
+
+        private static AddBookDto CreateAddBookDto(Category category)
+        {
+            return new AddBookDto
+            {
+                Author = "a",
+                Description = "d",
+                Pages = 12,
+                Title = "t",
+                CategoryId = category.Id
+            };
         }
 
         [Fact]
@@ -73,17 +78,20 @@ namespace BookStore.Services.Test.Unit.Books
             CategoryFactory categoryfactory = new CategoryFactory();
             Category category = categoryfactory.CreateCategory();
             _dataContext.Manipulate(x => x.Categories.Add(category));
-            AddBookDto dto = new AddBookDto
-            {
-                Author = "aaa",
-                Description = "ddd",
-                Pages = 132,
-                Title = "tiii",
-                CategoryId = category.Id
-            };
+            AddBookDto dto = CreateAddBookDto(category);
 
             _sut.Add(dto);
             var book = _dataContext.books.Include(x => x.Category).FirstOrDefault();
+            CreateUpdateBookDto(category, book);
+            _dataContext.books.Should().Contain(_ => _.Author == "upa");
+            _dataContext.books.Should().Contain(_ => _.Title == "upt");
+            _dataContext.books.Should().Contain(_ => _.Description == "upd");
+            _dataContext.books.Should().Contain(_ => _.Pages == 1111);
+            _dataContext.books.Should().Contain(_ => _.CategoryId == category.Id);
+        }
+
+        private void CreateUpdateBookDto(Category category, Book book)
+        {
             _sut.Update(new UpdateBookDto
             {
                 Author = "upa",
@@ -92,11 +100,6 @@ namespace BookStore.Services.Test.Unit.Books
                 Pages = 1111,
                 CategoryId = category.Id
             }, book.Id);
-            _dataContext.books.Should().Contain(_ => _.Author == "upa");
-            _dataContext.books.Should().Contain(_ => _.Title == "upt");
-            _dataContext.books.Should().Contain(_ => _.Description == "upd");
-            _dataContext.books.Should().Contain(_ => _.Pages == 1111);
-            _dataContext.books.Should().Contain(_ => _.CategoryId == category.Id);
         }
 
         [Fact]
@@ -107,14 +110,7 @@ namespace BookStore.Services.Test.Unit.Books
             CategoryFactory categoryfactory = new CategoryFactory();
             Category category = categoryfactory.CreateCategory();
             _dataContext.Manipulate(x => x.Categories.Add(category));
-            AddBookDto dto = new AddBookDto
-            {
-                Author = "aaa",
-                Description = "ddd",
-                Pages = 132,
-                Title = "tiii",
-                CategoryId = category.Id
-            };
+            AddBookDto dto = CreateAddBookDto(category);
 
             _sut.Add(dto);
             var book = _dataContext.books.Include(x => x.Category).FirstOrDefault();
@@ -137,14 +133,7 @@ namespace BookStore.Services.Test.Unit.Books
             CategoryFactory categoryfactory = new CategoryFactory();
             Category category = categoryfactory.CreateCategory();
             _dataContext.Manipulate(x => x.Categories.Add(category));
-            AddBookDto dto = new AddBookDto
-            {
-                Author = "aaa",
-                Description = "ddd",
-                Pages = 132,
-                Title = "tiii",
-                CategoryId = category.Id
-            };
+            AddBookDto dto = CreateAddBookDto(category);
 
             _sut.Add(dto);
             var book = _dataContext.books.Include(x => x.Category).FirstOrDefault();
@@ -166,14 +155,7 @@ namespace BookStore.Services.Test.Unit.Books
             CategoryFactory categoryfactory = new CategoryFactory();
             Category category = categoryfactory.CreateCategory();
             _dataContext.Manipulate(x => x.Categories.Add(category));
-            AddBookDto dto = new AddBookDto
-            {
-                Author = "aaa",
-                Description = "ddd",
-                Pages = 132,
-                Title = "tiii",
-                CategoryId = category.Id
-            };
+            AddBookDto dto = CreateAddBookDto(category);
 
             _sut.Add(dto);
             var book = _dataContext.books.Include(x => x.Category).FirstOrDefault();
