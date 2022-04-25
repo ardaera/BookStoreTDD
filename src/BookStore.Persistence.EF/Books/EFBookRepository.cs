@@ -1,4 +1,5 @@
-﻿using BookStore.Services.Books.Contracts;
+﻿using BookStore.Entities;
+using BookStore.Services.Books.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,26 @@ namespace BookStore.Persistence.EF.Books
         public EFBookRepository(EFDataContext dataContext)
         {
             _dataContext = dataContext;
+        }
+
+        public void Add(Book book)
+        {
+            _dataContext.books.Add(book);
+        }
+
+        public void Delete(Book book)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Book Find(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<GetBookDto> GetAll()
+        {
+            throw new NotImplementedException();
         }
     }
 }

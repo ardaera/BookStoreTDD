@@ -30,5 +30,6 @@ namespace BookStore.Persistence.EF
         }
        
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Book> books { get; set; }
     }
 }

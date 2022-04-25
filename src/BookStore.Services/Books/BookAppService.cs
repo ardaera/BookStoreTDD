@@ -1,4 +1,5 @@
-﻿using BookStore.Infrastructure.Application;
+﻿using BookStore.Entities;
+using BookStore.Infrastructure.Application;
 using BookStore.Services.Books.Contracts;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,22 @@ namespace BookStore.Services.Books
             _unitOfWork = unitOfWork;   
             _repository = repository;   
         }
+        public void Add (AddBookDto dto)
+        {
+            var book = new Book
+            {
+                Author = dto.Author,
+                CategoryId = dto.CategoryId,
+                Description = dto.Description,
+                Pages = dto.Pages,
+                Title = dto.Title,
+            };
+
+            _repository.Add(book);
+
+            _unitOfWork.Commit();
+        }
+
 
 
 

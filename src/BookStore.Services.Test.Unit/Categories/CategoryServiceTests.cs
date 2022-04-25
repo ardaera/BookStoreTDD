@@ -68,12 +68,32 @@ namespace BookStore.Services.Test.Unit.Categories
         }
 
         [Fact]
+        public void Update_CategoryForUpdateNotFoundException_properly()
+        {
+            var dummycategoryId = 1000;
+            var dto = CreateCategoryWithCategoryFactory();
+            Action expected = () => 
+            _sut.Update(new UpdateCategoryDto { Title = "UpdateDummy" }, dummycategoryId);
+            expected.Should().ThrowExactly<CategoryForUpdateNotFoundException>();
+        }
+
+        [Fact]
         public void Delete_delete_one_category_properly()
         {
             Category category = CreateCategoryWithCategoryFactory();
             _sut.Delete(category.Id);
             _dataContext.Categories.Should()
                 .NotContain(_ => _.Title == "dummy1");
+        }
+
+        [Fact]
+        public void Delete_CategoryForDeleteNotFoundException_properly()
+        {
+            var dummycategoryId = 1000;
+            var dto = CreateCategoryWithCategoryFactory();
+            Action expected = () =>
+            _sut.Delete(dummycategoryId);
+            expected.Should().ThrowExactly<CategoryForDeleteNotFoundException>();
         }
 
         private Category CreateCategoryWithCategoryFactory()

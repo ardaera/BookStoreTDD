@@ -9,5 +9,6 @@ namespace BookStore.Services.Books.Contracts
 {
     public interface BookkService: Service
     {
+        void Add(AddBookDto dto);
     }
 }
