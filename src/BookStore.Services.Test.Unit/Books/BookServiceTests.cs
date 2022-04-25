@@ -99,42 +99,90 @@ namespace BookStore.Services.Test.Unit.Books
             _dataContext.books.Should().Contain(_ => _.CategoryId == category.Id);
         }
 
-        //[Fact]
-        //public void Update_CategoryForUpdateNotFoundException_properly()
-        //{
-        //    var dummycategoryId = 1000;
-        //    var dto = CreateCategoryWithCategoryFactory();
-        //    Action expected = () =>
-        //    _sut.Update(new UpdateCategoryDto { Title = "UpdateDummy" }, dummycategoryId);
-        //    expected.Should().ThrowExactly<CategoryForUpdateNotFoundException>();
-        //}
-
-        //[Fact]
-        //public void Delete_delete_one_category_properly()
-        //{
-        //    Category category = CreateCategoryWithCategoryFactory();
-        //    _sut.Delete(category.Id);
-        //    _dataContext.Categories.Should()
-        //        .NotContain(_ => _.Title == "dummy1");
-        //}
-
-        //[Fact]
-        //public void Delete_CategoryForDeleteNotFoundException_properly()
-        //{
-        //    var dummycategoryId = 1000;
-        //    var dto = CreateCategoryWithCategoryFactory();
-        //    Action expected = () =>
-        //    _sut.Delete(dummycategoryId);
-        //    expected.Should().ThrowExactly<CategoryForDeleteNotFoundException>();
-        //}
-
-        private Category CreateCategoryWithCategoryFactory()
+        [Fact]
+        public void Update_BookForUpdateNotFoundException_properly()
         {
-            CategoryFactory categoryFactory = new CategoryFactory();
-            Category category = categoryFactory.CreateCategory();
-            _dataContext.Manipulate(_ => _.Categories.Add(category));
-            return category;
+            var bookId = 1151;
+
+            CategoryFactory categoryfactory = new CategoryFactory();
+            Category category = categoryfactory.CreateCategory();
+            _dataContext.Manipulate(x => x.Categories.Add(category));
+            AddBookDto dto = new AddBookDto
+            {
+                Author = "aaa",
+                Description = "ddd",
+                Pages = 132,
+                Title = "tiii",
+                CategoryId = category.Id
+            };
+
+            _sut.Add(dto);
+            var book = _dataContext.books.Include(x => x.Category).FirstOrDefault();
+
+            Action expected = () =>
+            _sut.Update(new UpdateBookDto
+            {
+                Author = "upa",
+                Title = "upt",
+                Description = "upd",
+                Pages = 1111,
+                CategoryId = category.Id
+            }, bookId);
+            expected.Should().ThrowExactly<BookForUpdateNotFoundException>();
         }
+
+        [Fact]
+        public void Delete_delete_one_book_properly()
+        {
+            CategoryFactory categoryfactory = new CategoryFactory();
+            Category category = categoryfactory.CreateCategory();
+            _dataContext.Manipulate(x => x.Categories.Add(category));
+            AddBookDto dto = new AddBookDto
+            {
+                Author = "aaa",
+                Description = "ddd",
+                Pages = 132,
+                Title = "tiii",
+                CategoryId = category.Id
+            };
+
+            _sut.Add(dto);
+            var book = _dataContext.books.Include(x => x.Category).FirstOrDefault();
+            _sut.Delete(book.Id);
+
+            _dataContext.books.Should()
+                .NotContain(_ => _.Title == book.Title);
+            _dataContext.books.Should()
+                .NotContain(_ => _.Author == book.Author);
+            _dataContext.books.Should()
+                .NotContain(_ => _.Description == book.Description);
+        }
+
+        [Fact]
+        public void Delete_BookForDeleteNotFoundException_properly()
+        {
+            var bookId = 2521;
+
+            CategoryFactory categoryfactory = new CategoryFactory();
+            Category category = categoryfactory.CreateCategory();
+            _dataContext.Manipulate(x => x.Categories.Add(category));
+            AddBookDto dto = new AddBookDto
+            {
+                Author = "aaa",
+                Description = "ddd",
+                Pages = 132,
+                Title = "tiii",
+                CategoryId = category.Id
+            };
+
+            _sut.Add(dto);
+            var book = _dataContext.books.Include(x => x.Category).FirstOrDefault();
+
+            Action expected = () =>
+            _sut.Delete(bookId);
+            expected.Should().ThrowExactly<BookForDeleteNotFoundException>();
+        }
+
 
         private List<Book> CreateBooksInDataBase()
         {
@@ -152,16 +200,6 @@ namespace BookStore.Services.Test.Unit.Books
             _.books.AddRange(books));
             return books;
         }
-
-        //private static AddCategoryDto GenerateAddCategoryDto()
-        //{
-        //    return new AddCategoryDto
-        //    {
-        //        Title = "dummy"
-        //    };
-        //}
-
-
     }
 
 }
