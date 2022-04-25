@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BookStore.Persistence.EF.Books
 {
-    public class EFBookRepository: BookRepository
+    public class EFBookRepository : BookRepository
     {
         private readonly EFDataContext _dataContext;
         public EFBookRepository(EFDataContext dataContext)
@@ -23,17 +23,24 @@ namespace BookStore.Persistence.EF.Books
 
         public void Delete(Book book)
         {
-            throw new NotImplementedException();
+            _dataContext.books.Remove(book);
         }
 
         public Book Find(int id)
         {
-            throw new NotImplementedException();
+            return _dataContext.books.Find(id);
         }
 
         public IList<GetBookDto> GetAll()
         {
-            throw new NotImplementedException();
+            return _dataContext.books.Select(x => new GetBookDto
+            {
+                Author = x.Author,
+                CategoryId = x.CategoryId,
+                Description = x.Description,
+                Pages = x.Pages,
+                Title = x.Title,
+            }).ToList();
         }
     }
 }

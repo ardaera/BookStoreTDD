@@ -1,8 +1,6 @@
-﻿using BookStore.Entities;
-
-namespace BookStore.Services.Books.Contracts
+﻿namespace BookStore.Services.Books.Contracts
 {
-    public class GetBookDto
+    public class UpdateBookDto
     {
         public string Title { get; set; }
         public int Pages { get; set; }

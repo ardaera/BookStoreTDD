@@ -34,8 +34,41 @@ namespace BookStore.Services.Books
             _unitOfWork.Commit();
         }
 
+        public void Delete(int id)
+        {
+            var book = _repository.Find(id);
+            if (book==null)
+            {
+                throw new BookForDeleteNotFoundException();
+            }
+            else
+            {
+                _repository.Delete(book);
+                _unitOfWork.Commit();
+            }
+        }
 
+        public IList<GetBookDto> GetAll()
+        {
+            return _repository.GetAll();
+        }
 
-
+        public void Update(UpdateBookDto dto, int id)
+        {
+            var book = _repository.Find(id);
+            if (book==null)
+            {
+                throw new BookForUpdateNotFoundException();
+            }
+            else
+            {
+                book.Author = dto.Author;
+                book.CategoryId = dto.CategoryId;
+                book.Description=   dto.Description;
+                book.Pages= dto.Pages;
+                book.Title = dto.Title; 
+                _unitOfWork.Commit();
+            }
+        }
     }
 }
