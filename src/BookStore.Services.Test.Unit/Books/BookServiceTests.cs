@@ -50,18 +50,6 @@ namespace BookStore.Services.Test.Unit.Books
             expected.Pages.Should().Be(dto.Pages);
         }
 
-        private static AddBookDto CreateAddBookDto(Category category)
-        {
-            return new AddBookDto
-            {
-                Author = "a",
-                Description = "d",
-                Pages = 12,
-                Title = "t",
-                CategoryId = category.Id
-            };
-        }
-
         [Fact]
         public void GetAll_returns_all_books_properly()
         {
@@ -88,18 +76,6 @@ namespace BookStore.Services.Test.Unit.Books
             _dataContext.books.Should().Contain(_ => _.Description == "upd");
             _dataContext.books.Should().Contain(_ => _.Pages == 1111);
             _dataContext.books.Should().Contain(_ => _.CategoryId == category.Id);
-        }
-
-        private void CreateUpdateBookDto(Category category, Book book)
-        {
-            _sut.Update(new UpdateBookDto
-            {
-                Author = "upa",
-                Title = "upt",
-                Description = "upd",
-                Pages = 1111,
-                CategoryId = category.Id
-            }, book.Id);
         }
 
         [Fact]
@@ -166,6 +142,31 @@ namespace BookStore.Services.Test.Unit.Books
         }
 
 
+
+        private void CreateUpdateBookDto(Category category, Book book)
+        {
+            _sut.Update(new UpdateBookDto
+            {
+                Author = "upa",
+                Title = "upt",
+                Description = "upd",
+                Pages = 1111,
+                CategoryId = category.Id
+            }, book.Id);
+        }
+        
+        private static AddBookDto CreateAddBookDto(Category category)
+        {
+            return new AddBookDto
+            {
+                Author = "a",
+                Description = "d",
+                Pages = 12,
+                Title = "t",
+                CategoryId = category.Id
+            };
+        }
+        
         private List<Book> CreateBooksInDataBase()
         {
             CategoryFactory categoryfactory = new CategoryFactory();
@@ -183,5 +184,4 @@ namespace BookStore.Services.Test.Unit.Books
             return books;
         }
     }
-
 }

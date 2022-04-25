@@ -96,6 +96,8 @@ namespace BookStore.Services.Test.Unit.Categories
             expected.Should().ThrowExactly<CategoryForDeleteNotFoundException>();
         }
 
+
+
         private Category CreateCategoryWithCategoryFactory()
         {
             CategoryFactory categoryFactory = new CategoryFactory();
